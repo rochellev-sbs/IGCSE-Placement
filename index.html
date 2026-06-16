@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mathematics Class Placement — SBS International School Chiangmai</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, 'Times New Roman', serif; background: #f4f2ec; color: #1a1a1a; min-height: 100vh; padding-bottom: 60px; }
+
+  .topbar { background: #1a3a5c; padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+  .topbar-school { font-size: 11px; letter-spacing: 0.12em; color: rgba(255,255,255,0.6); font-family: Georgia, serif; }
+  .topbar-right { font-size: 12px; color: rgba(255,255,255,0.5); font-family: Georgia, serif; }
+  .accent-bar { height: 4px; background: linear-gradient(90deg, #B5D4F4 0%, #7EB8E8 50%, #639922 100%); }
+
+  .portal-wrap { max-width: 620px; margin: 0 auto; padding: 0 20px; }
+
+  .portal-header { text-align: center; padding: 40px 0 30px; }
+  .portal-logo { width: 56px; height: 56px; border-radius: 14px; background: #1a3a5c; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 28px; }
+  .portal-title { font-size: 23px; font-weight: normal; color: #1a1a1a; margin-bottom: 6px; }
+  .portal-sub { font-size: 14px; color: #666; line-height: 1.7; }
+  .portal-school { font-size: 12px; color: #1a3a5c; font-weight: bold; letter-spacing: 0.04em; margin-bottom: 4px; }
+
+  .lookup-card { background: #fff; border: 0.5px solid #dedad2; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .lookup-lbl { font-size: 13px; color: #666; margin-bottom: 8px; }
+  .lookup-row { display: flex; gap: 10px; }
+  .lookup-input { flex: 1; font-size: 22px; font-weight: bold; font-family: Georgia, serif; padding: 11px 14px; border-radius: 8px; border: 0.5px solid #ccc8be; background: #f9f8f4; color: #1a1a1a; letter-spacing: 0.1em; min-width: 0; }
+  .lookup-input:focus { outline: none; border-color: #185FA5; box-shadow: 0 0 0 3px rgba(24,95,165,0.1); }
+  .lookup-btn { padding: 11px 24px; font-size: 15px; font-family: Georgia, serif; border-radius: 8px; border: none; background: #1a3a5c; color: #fff; cursor: pointer; white-space: nowrap; }
+  .lookup-btn:hover { background: #0f2540; }
+  .err-msg { font-size: 13px; color: #A32D2D; margin-top: 9px; display: none; }
+  .err-msg.show { display: block; }
+
+  .result-card { background: #fff; border: 0.5px solid #dedad2; border-radius: 12px; overflow: hidden; display: none; box-shadow: 0 1px 8px rgba(0,0,0,0.07); }
+  .result-card.show { display: block; }
+  .result-top { background: #1a3a5c; padding: 22px 28px; }
+  .result-school-lbl { font-size: 11px; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .result-heading { font-size: 15px; font-weight: normal; color: #fff; }
+  .result-body { padding: 24px 28px; }
+
+  .student-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 0.5px solid #e0ddd5; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: #E6F1FB; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: bold; color: #0C447C; flex-shrink: 0; }
+  .s-name { font-size: 18px; font-weight: normal; color: #1a1a1a; margin-bottom: 2px; }
+  .s-nick { font-size: 13px; color: #888; margin-bottom: 2px; }
+  .s-id   { font-size: 12px; color: #aaa; }
+
+  .placement-block { border-radius: 10px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; margin-bottom: 22px; }
+  .placement-block.core     { background: #EAF3DE; border: 1px solid #C0DD97; }
+  .placement-block.extended { background: #E6F1FB; border: 1px solid #B5D4F4; }
+  .p-icon { width: 42px; height: 42px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .core     .p-icon { background: #639922; }
+  .extended .p-icon { background: #185FA5; }
+  .p-lbl   { font-size: 11px; font-weight: bold; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 3px; }
+  .core     .p-lbl { color: #3B6D11; }
+  .extended .p-lbl { color: #185FA5; }
+  .p-class { font-size: 18px; color: #1a1a1a; margin-bottom: 3px; }
+  .p-yr    { font-size: 12px; color: #888; margin-bottom: 8px; }
+  .p-desc  { font-size: 13px; line-height: 1.7; }
+  .core     .p-desc { color: #3B6D11; }
+  .extended .p-desc { color: #185FA5; }
+
+  .chart-heading { font-size: 13px; color: #555; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; }
+  canvas { width: 100%; display: block; border-radius: 6px; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 9px; }
+  .legend span { font-size: 11px; color: #777; display: flex; align-items: center; gap: 5px; }
+  .leg-dot  { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .leg-dash { display: inline-block; width: 14px; height: 0; border-top: 2px dashed #aaa; vertical-align: middle; }
+  .leg-bar  { display: inline-block; width: 11px; height: 11px; background: #B5D4F4; border: 1px solid #185FA5; vertical-align: middle; }
+
+  .result-footer { padding: 14px 28px; background: #f7f6f2; border-top: 0.5px solid #e0ddd5; font-size: 12px; color: #888; line-height: 1.6; display: flex; align-items: flex-start; gap: 8px; }
+
+  @media (max-width: 480px) {
+    .lookup-row { flex-direction: column; }
+    .lookup-input { font-size: 18px; }
+    .lookup-btn { width: 100%; text-align: center; }
+    .result-body { padding: 18px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-school">SBS INTERNATIONAL SCHOOL CHIANGMAI</span>
+  <span class="topbar-right">Mathematics Placement Portal · 2025–2026</span>
+</div>
+<div class="accent-bar"></div>
+
+<div class="portal-wrap">
+  <div class="portal-header">
+    <div class="portal-logo">📐</div>
+    <p class="portal-school">SBS INTERNATIONAL SCHOOL CHIANGMAI</p>
+    <p class="portal-title">Mathematics Class Placement</p>
+    <p class="portal-sub">Academic Year 2026–2027<br>Enter your child's student number to view their placement.</p>
+  </div>
+
+  <div class="lookup-card">
+    <p class="lookup-lbl">Student number</p>
+    <div class="lookup-row">
+      <input class="lookup-input" id="lookupInput" type="text" placeholder="e.g. 6010030"
+        maxlength="10" autocomplete="off"
+        oninput="clearResult()"
+        onkeydown="if(event.key==='Enter') doLookup()" />
+      <button class="lookup-btn" onclick="doLookup()">View placement</button>
+    </div>
+    <p class="err-msg" id="errMsg">⚠ Student number not found. Please check and try again.</p>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-top">
+      <p class="result-school-lbl">SBS INTERNATIONAL SCHOOL CHIANGMAI</p>
+      <p class="result-heading">Mathematics Placement — Academic Year 2026–2027</p>
+    </div>
+    <div class="result-body">
+      <div class="student-row">
+        <div class="avatar" id="resAvatar"></div>
+        <div>
+          <p class="s-name" id="resName"></p>
+          <p class="s-nick" id="resNick"></p>
+          <p class="s-id"   id="resId"></p>
+        </div>
+      </div>
+      <div class="placement-block" id="placementBlock">
+        <div class="p-icon" id="pIcon"></div>
+        <div>
+          <p class="p-lbl">Placement for next year</p>
+          <p class="p-class" id="pClass"></p>
+          <p class="p-yr">Academic Year 2026–2027</p>
+          <p class="p-desc" id="pDesc"></p>
+        </div>
+      </div>
+      <p class="chart-heading">📊 Performance this year (2025–2026)</p>
+      <canvas id="perfChart"></canvas>
+      <div class="legend">
+        <span><span class="leg-dot" style="background:#185FA5;"></span>Quarterly score</span>
+        <span><span class="leg-dash"></span>&nbsp;Trendline</span>
+        <span><span class="leg-dot" style="background:#E24B4A;"></span>Below 75%</span>
+        <span><span class="leg-bar"></span>&nbsp;GPA</span>
+      </div>
+    </div>
+    <div class="result-footer">
+      <span style="font-size:15px;flex-shrink:0;">🛡</span>
+      <span>This placement is made with your child's well-being and long-term growth in mind. If you have any questions, please contact the Mathematics Department at SBS International School Chiangmai.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+var students = [
+  {id:"6010030",name:"Zihan Ma",          nick:"Mandy",    scores:[97,89,97,93.87], gpa:93.87, placement:"Extended"},
+  {id:"6420025",name:"Yiran Zheng",        nick:"Angela Z", scores:[95,90,93,92.07], gpa:92.07, placement:"Extended"},
+  {id:"6710069",name:"Yen-Ling Chen",      nick:"Serena",   scores:[89,93,93,91.60], gpa:91.60, placement:"Extended"},
+  {id:"6010118",name:"Peempat Likitanupak",nick:"Peem",     scores:[93,92,89,91.40], gpa:91.40, placement:"Extended"},
+  {id:"5810003",name:"Kawee Thitiwattanakarn",nick:"Bam",   scores:[92,91,90,90.87], gpa:90.87, placement:"Extended"},
+  {id:"6810036",name:"Zimu Zeng",          nick:"Melody",   scores:[95,93,86,90.40], gpa:90.40, placement:"Extended"},
+  {id:"6320019",name:"Jiaqi Hu",           nick:"Angela H", scores:[88,91,89,88.13], gpa:88.13, placement:"Extended"},
+  {id:"6420001",name:"Haojun Chen",        nick:"Eason",    scores:[94,89,82,87.87], gpa:87.87, placement:"Extended"},
+  {id:"6720010",name:"Tingyan Yu",         nick:"Mia",      scores:[93,90,85,86.87], gpa:86.87, placement:"Extended"},
+  {id:"5920006",name:"Gorya Tanjaturon",   nick:"Gorya",    scores:[94,86,87,86.67], gpa:86.67, placement:"Extended"},
+  {id:"6810031",name:"Malikha",            nick:"Irene",    scores:[91,75,88,85.67], gpa:85.67, placement:"Extended"},
+  {id:"6010068",name:"Phubing Chaivongkeaw",nick:"Punpon",  scores:[88,77,89,84.60], gpa:84.60, placement:"Extended"},
+  {id:"6010136",name:"Nanthapat Nampuan",  nick:"Nakin",    scores:[88,78,84,82.93], gpa:82.93, placement:"Extended"},
+  {id:"6720054",name:"Xinuo Qian",         nick:"Cassie",   scores:[88,87,76,82.27], gpa:82.27, placement:"Extended"},
+  {id:"6620047",name:"Pui Sze Chan",       nick:"Ceci",     scores:[84,84,81,82.27], gpa:82.27, placement:"Extended"},
+  {id:"6720039",name:"Xuzhi Hu",           nick:"Hugo",     scores:[87,75,77,80.87], gpa:80.87, placement:"Extended"},
+  {id:"5810024",name:"Nattanan Phosri",    nick:"Up",       scores:[85,74,85,80.80], gpa:80.80, placement:"Extended"},
+  {id:"6610133",name:"Jiayi Zhang",        nick:"Helen",    scores:[83,86,75,77.80], gpa:77.80, placement:"Extended"},
+  {id:"6810053",name:"Soraya Wongpramote", nick:"Amy",      scores:[82,79,77,76.73], gpa:76.73, placement:"Extended"},
+  {id:"6810058",name:"Chi-Yun Teng",       nick:"Doris",    scores:[87,81,66,75.27], gpa:75.27, placement:"Extended"},
+  {id:"6120022",name:"Sasinakin Janthaping",nick:"Seen",    scores:[73,82,77,74.73], gpa:74.73, placement:"Extended"},
+  {id:"6320068",name:"Xiaozai Zhu",        nick:"Jeremy",   scores:[80,70,77,74.13], gpa:74.13, placement:"Extended"},
+  {id:"6410069",name:"Fujiang Zhang",      nick:"Burt",     scores:[74,71,75,74.00], gpa:74.00, placement:"Extended"},
+  {id:"6720072",name:"Zixi Zhang",         nick:"Dave",     scores:[84,66,74,74.00], gpa:74.00, placement:"Extended"},
+  {id:"6720004",name:"Shihan Xu",          nick:"Lisa",     scores:[74,71,70,71.60], gpa:71.60, placement:"Extended"},
+  {id:"6510096",name:"Yueming Shen",       nick:"Frank",    scores:[75,69,70,71.07], gpa:71.07, placement:"Extended"},
+  {id:"6810065",name:"May Chan Myae Sharr",nick:"Mabel",    scores:[84,71,58,71.07], gpa:71.07, placement:"Core"},
+  {id:"6710011",name:"Thanitphop Lueangrungthip",nick:"Teekao",scores:[73,70,66,68.13],gpa:68.13,placement:"Core"},
+  {id:"6010129",name:"Tanawat Saengsureekulkij",nick:"Tontoon",scores:[75,61,75,67.80],gpa:67.80,placement:"Core"},
+  {id:"6320044",name:"Zhengkun He",        nick:"David",    scores:[70,62,75,67.67], gpa:67.67, placement:"Core"},
+  {id:"6510139",name:"Yibo Wang",          nick:"Arthur",   scores:[70,71,63,67.33], gpa:67.33, placement:"Core"},
+  {id:"6610110",name:"Junyan Zhu",         nick:"Felix",    scores:[80,58,64,67.00], gpa:67.00, placement:"Core"},
+  {id:"6010119",name:"Adisa Intarawichai", nick:"Maila",    scores:[73,59,71,65.87], gpa:65.87, placement:"Core"},
+  {id:"6810005",name:"Kejie Chen",         nick:"Luke",     scores:[80,50,58,64.53], gpa:64.53, placement:"Core"},
+  {id:"6720056",name:"Haijing Liu",        nick:"Jayden",   scores:[70,51,68,63.93], gpa:63.93, placement:"Core"},
+  {id:"5910025",name:"Adinai Laoyeepa",    nick:"Ohmmy",    scores:[82,60,54,63.60], gpa:63.60, placement:"Core"},
+  {id:"6810023",name:"Eyawadee Jane Magnan",nick:"Eya",     scores:[66,55,71,63.20], gpa:63.20, placement:"Core"},
+  {id:"6410109",name:"Camille Lavinia Lima",nick:"Camille", scores:[69,54,65,61.93], gpa:61.93, placement:"Core"},
+  {id:"6620035",name:"Minju Kim",          nick:"Leo",      scores:[80,55,52,61.20], gpa:61.20, placement:"Core"},
+  {id:"6510114",name:"Dai-Ying Lu",        nick:"Kimi",     scores:[73,50,60,59.47], gpa:59.47, placement:"Core"},
+  {id:"6810029",name:"Zun Pann Yati",      nick:"Eve",      scores:[60,50,68,59.40], gpa:59.40, placement:"Core"},
+  {id:"6510059",name:"Tytanong Cooper",    nick:"Tyty",     scores:[72,50,58,58.27], gpa:58.27, placement:"Core"},
+  {id:"6110039",name:"Zikun Chen",         nick:"Quentin",  scores:[58,60,54,55.33], gpa:55.33, placement:"Core"},
+  {id:"6510116",name:"Semen Popov",        nick:"Simon",    scores:[67,51,50,53.80], gpa:53.80, placement:"Core"},
+  {id:"6810026",name:"Sinwa Petratos",     nick:"Sinwa",    scores:[56,50,56,51.13], gpa:51.13, placement:"Core"},
+  {id:"5720001",name:"Hannah Alisala Barclay",nick:"Hannah",scores:[55,50,54,50.80], gpa:50.80, placement:"Core"},
+  {id:"6710072",name:"Sam Henry Davies",   nick:"Sam",      scores:[50,50,50,47.33], gpa:47.33, placement:"Core"},
+];
+
+function clearResult() {
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('errMsg').classList.remove('show');
+}
+
+function doLookup() {
+  clearResult();
+  var q = document.getElementById('lookupInput').value.trim();
+  if (!q) return;
+  var s = students.find(function(x){ return x.id === q; });
+  if (!s) { document.getElementById('errMsg').classList.add('show'); return; }
+  showResult(s);
+}
+
+function initials(name) {
+  return name.split(' ').slice(0,2).map(function(w){ return w[0]||''; }).join('').toUpperCase();
+}
+
+function showResult(s) {
+  var isCore = s.placement === 'Core';
+  document.getElementById('resAvatar').textContent = initials(s.name);
+  document.getElementById('resName').textContent   = s.name;
+  document.getElementById('resNick').textContent   = s.nick ? '"' + s.nick + '"' : '';
+  document.getElementById('resId').textContent     = 'Student no. ' + s.id;
+
+  var block = document.getElementById('placementBlock');
+  block.className = 'placement-block ' + (isCore ? 'core' : 'extended');
+  document.getElementById('pIcon').textContent  = isCore ? '📘' : '📐';
+  document.getElementById('pClass').textContent = isCore ? 'Core Mathematics' : 'Extended Mathematics';
+  document.getElementById('pDesc').textContent  = isCore
+    ? 'Your child is placed in Core Mathematics, designed to build a strong and confident foundation. This is a caring decision to ensure they are fully supported and set up for long-term success.'
+    : 'Your child is placed in Extended Mathematics, a rigorous and enriched programme. This reflects confidence in their abilities and readiness to take on greater academic challenges.';
+
+  document.getElementById('resultCard').classList.add('show');
+
+  setTimeout(function() {
+    var canvas = document.getElementById('perfChart');
+    var dpr = window.devicePixelRatio || 1;
+    var cssW = canvas.parentElement.offsetWidth || 540;
+    var cssH = 270;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    drawChart(s.scores, s.gpa, canvas, dpr);
+    document.getElementById('resultCard').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 60);
+}
+
+function drawChart(scores, gpa, canvas, dpr) {
+  var ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  var W = canvas.width/dpr, H = canvas.height/dpr;
+  var pad = {top:50,bottom:44,left:50,right:16};
+  var divX  = W - 138;
+  var barCX = divX + 18 + (W - divX - 18 - pad.right)/2;
+  var barW  = 58;
+  var gH    = H - pad.top - pad.bottom;
+  var lW    = divX - pad.left;
+
+  ctx.clearRect(0,0,W,H);
+
+  [0,25,50,75,100].forEach(function(v){
+    var y = pad.top + gH - (v/100)*gH;
+    ctx.strokeStyle='rgba(140,135,125,0.22)'; ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(W-pad.right,y); ctx.stroke();
+    ctx.fillStyle='#888'; ctx.font='bold 11px Georgia,serif'; ctx.textAlign='right';
+    ctx.fillText(v+'%', pad.left-7, y+4);
+  });
+
+  var thY = pad.top + gH - 0.75*gH;
+  ctx.save(); ctx.strokeStyle='#E24B4A'; ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(pad.left,thY); ctx.lineTo(W-pad.right,thY); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  ctx.fillStyle='#E24B4A'; ctx.font='bold 10px Georgia,serif'; ctx.textAlign='left';
+  ctx.fillText('75% threshold', pad.left+5, thY-6);
+
+  ctx.strokeStyle='rgba(140,135,125,0.3)'; ctx.lineWidth=0.8;
+  ctx.beginPath(); ctx.moveTo(divX,pad.top-14); ctx.lineTo(divX,pad.top+gH+4); ctx.stroke();
+
+  var pts = scores.map(function(s,i){
+    return {x:pad.left+(i/(scores.length-1))*lW, y:pad.top+gH-(s/100)*gH, v:s};
+  });
+  ctx.strokeStyle='#7EB8E8'; ctx.lineWidth=2.5;
+  ctx.beginPath(); pts.forEach(function(p,i){i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);}); ctx.stroke();
+
+  var n=scores.length, xM=(n-1)/2, yM=scores.reduce(function(a,b){return a+b;},0)/n;
+  var num=0,den=0;
+  scores.forEach(function(s,i){num+=(i-xM)*(s-yM);den+=(i-xM)*(i-xM);});
+  var slope=den?num/den:0, icept=yM-slope*xM;
+  ctx.save(); ctx.strokeStyle=slope<0?'#E24B4A':'#5A9E2F'; ctx.lineWidth=1.8; ctx.setLineDash([5,3]);
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pad.top+gH-(icept/100)*gH);
+  ctx.lineTo(pts[n-1].x, pad.top+gH-((slope*(n-1)+icept)/100)*gH);
+  ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+
+  var ql=['Q1','Q2','Q3','Q4'];
+  pts.forEach(function(p,i){
+    ctx.beginPath(); ctx.arc(p.x,p.y,9,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+    ctx.beginPath(); ctx.arc(p.x,p.y,7,0,Math.PI*2);
+    ctx.fillStyle=p.v<75?'#E24B4A':'#185FA5'; ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+    var txt=p.v+'%'; ctx.font='bold 14px Georgia,serif';
+    var tw=ctx.measureText(txt).width;
+    var pW=tw+14,pH=22,pX=p.x-pW/2,pY=p.y-40;
+    ctx.fillStyle=p.v<75?'#FCEBEB':'#E6F1FB'; rr(ctx,pX,pY,pW,pH,5); ctx.fill();
+    ctx.strokeStyle=p.v<75?'#E24B4A':'#185FA5'; ctx.lineWidth=1; rr(ctx,pX,pY,pW,pH,5); ctx.stroke();
+    ctx.fillStyle=p.v<75?'#A32D2D':'#0C447C'; ctx.textAlign='center'; ctx.fillText(txt,p.x,pY+15);
+    ctx.fillStyle='#666'; ctx.font='bold 11px Georgia,serif'; ctx.textAlign='center';
+    ctx.fillText(ql[i],p.x,H-6);
+  });
+
+  ctx.fillStyle='#aaa'; ctx.font='10px Georgia,serif'; ctx.textAlign='center';
+  ctx.fillText('Quarterly performance & trend', pad.left+lW/2, H-20);
+
+  var aY=pad.top+gH-(gpa/100)*gH, bHH=pad.top+gH-aY, bL=barCX-barW/2;
+  var above=gpa>=75;
+  var bFill=above?'#B5D4F4':'#F7C1C1', bStroke=above?'#185FA5':'#E24B4A', bTxtC=above?'#0C447C':'#A32D2D';
+  ctx.fillStyle=bFill; rrTop(ctx,bL,aY,barW,bHH,6); ctx.fill();
+  ctx.fillStyle=bStroke; rrTop(ctx,bL,aY,barW,6,4); ctx.fill();
+  ctx.strokeStyle=bStroke; ctx.lineWidth=1.5; rrTop(ctx,bL,aY,barW,bHH,6); ctx.stroke();
+
+  var avgTxt=parseFloat(gpa).toFixed(2)+'%';
+  ctx.font='bold 14px Georgia,serif';
+  var atw=ctx.measureText(avgTxt).width;
+  var apW=atw+16,apH=24,apX=barCX-apW/2,apY=aY-38;
+  ctx.fillStyle=bFill; rr(ctx,apX,apY,apW,apH,6); ctx.fill();
+  ctx.strokeStyle=bStroke; ctx.lineWidth=1.5; rr(ctx,apX,apY,apW,apH,6); ctx.stroke();
+  ctx.fillStyle=bTxtC; ctx.textAlign='center'; ctx.fillText(avgTxt,barCX,apY+17);
+
+  var bdTxt=above?'✓ Met':'✗ Below';
+  var bdW=62,bdH=20,bdX=barCX-bdW/2,bdY=apY-28;
+  ctx.fillStyle=above?'#EAF3DE':'#FCEBEB'; rr(ctx,bdX,bdY,bdW,bdH,5); ctx.fill();
+  ctx.strokeStyle=above?'#C0DD97':'#F7C1C1'; ctx.lineWidth=1; rr(ctx,bdX,bdY,bdW,bdH,5); ctx.stroke();
+  ctx.fillStyle=above?'#3B6D11':'#A32D2D'; ctx.font='bold 11px Georgia,serif'; ctx.textAlign='center';
+  ctx.fillText(bdTxt,barCX,bdY+13);
+
+  ctx.fillStyle='#666'; ctx.font='bold 11px Georgia,serif'; ctx.textAlign='center';
+  ctx.fillText('GPA',barCX,H-6);
+  ctx.fillStyle='#aaa'; ctx.font='10px Georgia,serif';
+  ctx.fillText('(Year)',barCX,H-20);
+}
+
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+function rrTop(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+</script>
+</body>
+</html>
